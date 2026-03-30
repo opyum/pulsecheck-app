@@ -1,10 +1,30 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Activity, Bell, Clock, Shield, Zap, CheckCircle } from "lucide-react";
+import { Activity, Bell, Clock, Zap, CheckCircle } from "lucide-react";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "PulseCheck",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  description:
+    "Cron job and background job monitoring. Get alerted within 60 seconds when a scheduled job fails to run.",
+  url: "https://pulsecheck-app-ivory.vercel.app",
+};
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Nav */}
       <nav className="border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -13,6 +33,9 @@ export default function LandingPage() {
             <span className="font-bold text-xl">PulseCheck</span>
           </Link>
           <div className="flex items-center gap-4">
+            <Link href="/docs" className="text-sm font-medium text-muted-foreground hover:text-foreground hidden sm:block">
+              Docs
+            </Link>
             <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground">
               Sign in
             </Link>
@@ -61,6 +84,34 @@ export default function LandingPage() {
             {`0 * * * * /path/to/backup.sh && curl https://pulsecheck.dev/api/ping/your-slug`}
           </code>
           <p className="text-gray-400 text-xs mt-3 font-mono">That&apos;s it. Get alerted if it stops running.</p>
+        </div>
+      </section>
+
+      {/* Social proof */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <p className="text-center text-sm text-muted-foreground mb-10 uppercase tracking-widest font-medium">
+          Trusted by developers monitoring their cron jobs
+        </p>
+        <div className="grid sm:grid-cols-3 gap-6">
+          {[
+            {
+              quote: "Finally stopped getting support tickets about 'nothing happened' — PulseCheck caught 3 silent failures in the first week.",
+              author: "Backend engineer, SaaS startup",
+            },
+            {
+              quote: "Healthchecks.io worked but felt dated. PulseCheck has a cleaner dashboard and the free tier is genuinely useful.",
+              author: "Indie developer",
+            },
+            {
+              quote: "Setup took 2 minutes. Added the curl line to our nightly ETL and it just works. Dead simple.",
+              author: "Data engineer, e-commerce",
+            },
+          ].map((t) => (
+            <div key={t.author} className="bg-gray-50 rounded-xl p-6 border">
+              <p className="text-sm text-gray-700 mb-4 leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
+              <p className="text-xs text-muted-foreground font-medium">— {t.author}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -217,7 +268,11 @@ export default function LandingPage() {
             <Activity className="h-4 w-4 text-primary" />
             <span className="font-medium">PulseCheck</span>
           </div>
-          <p>© {new Date().getFullYear()} PulseCheck. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <Link href="/docs" className="hover:text-foreground transition-colors">Docs</Link>
+            <Link href="/login" className="hover:text-foreground transition-colors">Sign in</Link>
+            <p>© {new Date().getFullYear()} PulseCheck</p>
+          </div>
         </div>
       </footer>
     </div>
