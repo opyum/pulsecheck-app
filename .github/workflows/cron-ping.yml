@@ -1,0 +1,26 @@
+name: Cron Ping — Missed Check Detection
+
+on:
+  schedule:
+    # GitHub Actions minimum is every 5 minutes.
+    # For per-minute resolution, upgrade to Vercel Pro or use cron-job.org.
+    - cron: "*/5 * * * *"
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  ping:
+    name: Ping check-missed endpoint
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Ping /api/cron/check-missed
+        run: |
+          response=$(curl -s -o /tmp/body.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://pulsecheck-app-ivory.vercel.app/api/cron/check-missed")
+          echo "HTTP $response"
+          cat /tmp/body.json
+          if [ "$response" -ne 200 ]; then
+            echo "::error::Cron endpoint returned $response"
+            exit 1
+          fi
