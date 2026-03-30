@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Copy, Settings, Pause, Play } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Check, CheckEvent } from "@prisma/client";
 
 type CheckWithEvents = Check & { events: CheckEvent[] };
@@ -46,6 +47,34 @@ function CopyButton({ text }: { text: string }) {
       <Copy className="h-4 w-4" />
       {copied && <span className="sr-only">Copied!</span>}
     </button>
+  );
+}
+
+function PauseButton({ check }: { check: CheckWithEvents }) {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  async function handleToggle() {
+    setLoading(true);
+    await fetch(`/api/checks/${check.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paused: !check.paused }),
+    });
+    setLoading(false);
+    router.refresh();
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      title={check.paused ? "Resume" : "Pause"}
+      onClick={handleToggle}
+      disabled={loading}
+    >
+      {check.paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+    </Button>
   );
 }
 
@@ -106,6 +135,7 @@ function CheckRow({ check }: { check: CheckWithEvents }) {
 
       {/* Actions */}
       <div className="flex items-center gap-2 flex-shrink-0">
+        <PauseButton check={check} />
         <Link href={`/dashboard/checks/${check.id}/edit`}>
           <Button variant="ghost" size="icon" title="Edit">
             <Settings className="h-4 w-4" />
