@@ -204,6 +204,68 @@ func runJob() error {
           </p>
         </section>
 
+
+        {/* REST API */}
+        <section id="api" className="mb-12">
+          <h2 className="text-2xl font-bold mb-2">REST API</h2>
+          <p className="text-muted-foreground mb-4">
+            Manage checks programmatically. Create an API key from your{" "}
+            <a href="/dashboard/keys" className="text-primary underline">dashboard</a>.
+          </p>
+
+          <h3 className="text-lg font-semibold mb-3">Authentication</h3>
+          <div className="bg-gray-900 rounded-xl p-6 text-white mb-6">
+            <code className="font-mono text-sm text-green-400">
+              Authorization: Bearer pc_live_&lt;your-key&gt;
+            </code>
+          </div>
+
+          <h3 className="text-lg font-semibold mb-3">Endpoints</h3>
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b bg-gray-50">
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Method</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Endpoint</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Description</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {[
+                  { method: "GET", ep: "/api/v1/checks", desc: "List all your checks" },
+                  { method: "POST", ep: "/api/v1/checks", desc: "Create a new check" },
+                  { method: "GET", ep: "/api/v1/checks/:id", desc: "Get check details + event history" },
+                  { method: "PATCH", ep: "/api/v1/checks/:id", desc: "Update check name, interval, grace period" },
+                  { method: "DELETE", ep: "/api/v1/checks/:id", desc: "Delete a check permanently" },
+                  { method: "POST", ep: "/api/v1/checks/:id/pause", desc: "Pause alerting for this check" },
+                  { method: "POST", ep: "/api/v1/checks/:id/resume", desc: "Resume a paused check" },
+                ].map((row) => (
+                  <tr key={row.ep}>
+                    <td className="px-4 py-3 font-mono text-xs text-blue-600 font-semibold">{row.method}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-primary">{row.ep}</td>
+                    <td className="px-4 py-3 text-gray-600">{row.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="text-lg font-semibold mb-3">Example: create a check</h3>
+          <div className="bg-gray-900 rounded-xl p-6 text-white space-y-1 font-mono text-sm">
+            <p className="text-gray-400"># Create a check (interval=3600s, grace=300s)</p>
+            <p className="text-green-400">curl -X POST https://pulsecheck-app-ivory.vercel.app/api/v1/checks \</p>
+            <p className="text-green-400 ml-4">-H <span className="text-yellow-300">&quot;Authorization: Bearer pc_live_...&quot;</span> \</p>
+            <p className="text-green-400 ml-4">-H <span className="text-yellow-300">&quot;Content-Type: application/json&quot;</span> \</p>
+            <p className="text-green-400 ml-4">-d <span className="text-yellow-300">&apos;&#123;&quot;name&quot;:&quot;Daily backup&quot;,&quot;interval&quot;:3600,&quot;gracePeriod&quot;:300&#125;&apos;</span></p>
+          </div>
+
+          <p className="text-xs text-muted-foreground mt-4">
+            Rate limits: Free plan 100 req/min · Paid plans 1000 req/min. Limits are returned in{" "}
+            <code className="bg-gray-100 px-1 rounded">X-RateLimit-Limit</code> and{" "}
+            <code className="bg-gray-100 px-1 rounded">X-RateLimit-Remaining</code> headers.
+          </p>
+        </section>
+
         {/* CTA */}
         <section className="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center">
           <h2 className="text-2xl font-bold mb-2">Ready to start monitoring?</h2>

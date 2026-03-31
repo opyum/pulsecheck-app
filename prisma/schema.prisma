@@ -26,6 +26,7 @@ model User {
   accounts Account[]
   sessions Session[]
   checks   Check[]
+  apiKeys  ApiKey[]
 }
 
 model Account {
@@ -138,4 +139,27 @@ enum AlertChannel {
 enum AlertStatus {
   SENT
   FAILED
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  userId     String
+  name       String
+  keyHash    String    @unique
+  keyPrefix  String
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rateLimits ApiRateLimit[]
+}
+
+model ApiRateLimit {
+  apiKeyId String
+  window   String
+  count    Int    @default(0)
+
+  apiKey ApiKey @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  @@id([apiKeyId, window])
 }

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
-import { Activity, LayoutDashboard, CreditCard, LogOut } from "lucide-react";
+import { Activity, LayoutDashboard, CreditCard, LogOut, KeyRound } from "lucide-react";
 
 export default async function DashboardLayout({
   children,
@@ -36,6 +36,13 @@ export default async function DashboardLayout({
           >
             <CreditCard className="h-4 w-4" />
             Billing
+          </Link>
+          <Link
+            href="/dashboard/keys"
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors"
+          >
+            <KeyRound className="h-4 w-4" />
+            API Keys
           </Link>
         </nav>
 
