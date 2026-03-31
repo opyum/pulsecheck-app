@@ -260,7 +260,7 @@ func runJob() error {
           </div>
 
           <p className="text-xs text-muted-foreground mt-4">
-            Rate limits: Free plan 100 req/min · Paid plans 1000 req/min. Limits are returned in{" "}
+            Rate limits: Free plan 100 req/min Â· Paid plans 1000 req/min. Limits are returned in{" "}
             <code className="bg-gray-100 px-1 rounded">X-RateLimit-Limit</code> and{" "}
             <code className="bg-gray-100 px-1 rounded">X-RateLimit-Remaining</code> headers.
           </p>
